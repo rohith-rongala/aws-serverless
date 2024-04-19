@@ -17,14 +17,16 @@ import java.util.Map;
 	logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED
 )
 
-@LambdaUrlConfig(authType = AuthType.NONE,invokeMode = InvokeMode.BUFFERED)
+@LambdaUrlConfig(invokeMode = InvokeMode.BUFFERED,authType = AuthType.NONE)
 public class HelloWorld implements RequestHandler<Object, Map<String, Object>> {
 
 	public Map<String, Object> handleRequest(Object request, Context context) {
 		System.out.println("Hello from lambda");
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("statusCode", 200);
-		resultMap.put("message", "Hello from Lambda");
-		return resultMap;
+		Map<String, Object> response = new HashMap<String, Object>();
+		response.put("statusCode", 200);
+		Map<String, String> responseBody = new HashMap<String, String>();
+		responseBody.put("message", "Hello from Lambda");
+		response.put("body", responseBody.toString());
+		return response;
 	}
 }
