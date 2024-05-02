@@ -25,6 +25,6 @@ public class SqsHandler implements RequestHandler<SQSEvent, String> {
 			System.out.println("Received message: " + messageBody);
 		}
 
-		return "Executed successfully";
+		return "Executed successfully from lambda sqs handler";
 	}
 }
