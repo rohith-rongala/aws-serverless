@@ -32,7 +32,7 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, Void> {
 
 	public AuditProducer() {
 		this.dynamoDB = new DynamoDB(AmazonDynamoDBClientBuilder.defaultClient());
-		this.auditTable = dynamoDB.getTable("cmtr-aa756657-Audit");
+		this.auditTable = dynamoDB.getTable("cmtr-aa756657-Audit-test");
 	}
 
 	@Override
