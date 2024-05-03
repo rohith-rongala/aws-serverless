@@ -67,19 +67,40 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, Void> {
 	}
 
 	private Map<String, Object> getOldValue(com.amazonaws.services.lambda.runtime.events.models.dynamodb.StreamRecord streamRecord) {
+		Map<String, com.amazonaws.services.lambda.runtime.events.models.dynamodb.AttributeValue> imageMap = streamRecord.getOldImage();
 		Map<String, Object> oldValues = new HashMap<>();
-//		com.amazonaws.services.lambda.runtime.events.models.dynamodb.StreamRecord abc = streamRecord.getOldImage().entrySet();
-		for (Map.Entry<String,com.amazonaws.services.lambda.runtime.events.models.dynamodb.AttributeValue> entry : streamRecord.getOldImage().entrySet()) {
-			oldValues.put(entry.getKey(), entry.getValue().getS());
-		}
+
+		imageMap.forEach((key, attrValue) -> {
+			if (attrValue.getS() != null) {
+				oldValues.put(key, attrValue.getS());
+			} else if (attrValue.getN() != null) {
+				try {
+					oldValues.put(key, Integer.parseInt(attrValue.getN()));
+				} catch (NumberFormatException e) {
+					oldValues.put(key, Double.parseDouble(attrValue.getN()));
+				}
+			}
+		});
+
 		return oldValues;
 	}
 
 	private Map<String, Object> getNewValue(com.amazonaws.services.lambda.runtime.events.models.dynamodb.StreamRecord streamRecord) {
+		Map<String, com.amazonaws.services.lambda.runtime.events.models.dynamodb.AttributeValue> imageMap = streamRecord.getNewImage();
 		Map<String, Object> newValues = new HashMap<>();
-		for (Map.Entry<String, com.amazonaws.services.lambda.runtime.events.models.dynamodb.AttributeValue> entry : streamRecord.getNewImage().entrySet()) {
-			newValues.put(entry.getKey(), entry.getValue().getN());
-		}
+
+		imageMap.forEach((key, attrValue) -> {
+			if (attrValue.getS() != null) {
+				newValues.put(key, attrValue.getS());
+			} else if (attrValue.getN() != null) {
+				try {
+					newValues.put(key, Integer.parseInt(attrValue.getN()));
+				} catch (NumberFormatException e) {
+					newValues.put(key, Double.parseDouble(attrValue.getN()));
+				}
+			}
+		});
+
 		return newValues;
 	}
 
