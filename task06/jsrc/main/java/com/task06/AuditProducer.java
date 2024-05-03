@@ -39,7 +39,7 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, Void> {
 			com.amazonaws.services.lambda.runtime.events.models.dynamodb.StreamRecord streamRecord = record.getDynamodb();
 			if ("INSERT".equals(record.getEventName())) {
 				handleInsertEvent(streamRecord);
-			} else if ("MODIFY".equals(record.getEventName())) {
+			} else  {
 				handleModifyEvent(streamRecord);
 			}
 		}
