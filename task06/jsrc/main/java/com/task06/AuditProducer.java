@@ -39,13 +39,12 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, Void> {
 			com.amazonaws.services.lambda.runtime.events.models.dynamodb.StreamRecord streamRecord = record.getDynamodb();
 			if ("INSERT".equals(record.getEventName())) {
 				handleInsertEvent(streamRecord);
-			} else  {
+			} else {
 				handleModifyEvent(streamRecord);
 			}
 		}
 		return null;
 	}
-
 
 	private void handleInsertEvent(com.amazonaws.services.lambda.runtime.events.models.dynamodb.StreamRecord streamRecord) {
 		String itemId = streamRecord.getKeys().get("key").getS();
@@ -56,17 +55,34 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, Void> {
 	}
 
 	private void handleModifyEvent(com.amazonaws.services.lambda.runtime.events.models.dynamodb.StreamRecord streamRecord) {
+		System.out.println("Entering modify Event");
 		String itemId = streamRecord.getKeys().get("key").getS();
 		Map<String, Object> oldValue = getOldValue(streamRecord);
 		Map<String, Object> newValue = getNewValue(streamRecord);
 		String modificationTime = LocalDateTime.now().toString();
 
-		// Extract updated attributes
+		/*// Extract updated attributes
 		Set<String> updatedAttributes = new HashSet<>(newValue.keySet());
 		updatedAttributes.removeAll(oldValue.keySet());
 
 		// Handle each updated attribute, it supposes that only one field would be updated each time,
 		// please revise according to your own logic
+		System.out.println("Invoking AuditEntry");
+		for (String updatedAttribute: updatedAttributes) {
+			createAuditEntry(itemId, modificationTime, oldValue, newValue, updatedAttribute);
+		}*/
+		// Extract updated attributes
+		Set<String> updatedAttributes = new HashSet<>();
+		for (Map.Entry<String, Object> entry: newValue.entrySet()) {
+			String key = entry.getKey();
+			Object value = entry.getValue();
+			if (!oldValue.containsKey(key) || !oldValue.get(key).equals(value)) {
+				updatedAttributes.add(key);
+			}
+		}
+
+		// Handle each updated attribute
+		System.out.println("Invoking AuditEntry");
 		for (String updatedAttribute: updatedAttributes) {
 			createAuditEntry(itemId, modificationTime, oldValue, newValue, updatedAttribute);
 		}
@@ -145,6 +161,7 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, Void> {
 	}*/
 
 	private void createAuditEntry(String itemId, String modificationTime, Map<String, Object> oldValue, Map<String, Object> newValue, String updatedAttribute) {
+		System.out.println("Entering createAudit");
 		Map<String, Object> auditEntryMap = new HashMap<>();
 		auditEntryMap.put("id", UUID.randomUUID().toString());
 		auditEntryMap.put("itemKey", itemId);
@@ -153,13 +170,17 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, Void> {
 		auditEntryMap.put("newValue", newValue.get(updatedAttribute));
 		auditEntryMap.put("updatedAttribute", updatedAttribute);
 
+		System.out.println("Creating a Item");
 		Item auditEntry = Item.fromMap(auditEntryMap);
 		PutItemSpec putItemSpec = new PutItemSpec().withItem(auditEntry);
 		try {
+			System.out.println("Put Item");
 			auditTable.putItem(putItemSpec);
 		} catch (Exception e) {
 			//Handle Exception
+			System.out.println(e.getMessage().toString());
 			e.printStackTrace();
+
 		}
 	}
 }
