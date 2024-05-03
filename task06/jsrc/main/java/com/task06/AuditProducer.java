@@ -78,7 +78,7 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, Void> {
 	private Map<String, Object> getNewValue(com.amazonaws.services.lambda.runtime.events.models.dynamodb.StreamRecord streamRecord) {
 		Map<String, Object> newValues = new HashMap<>();
 		for (Map.Entry<String, com.amazonaws.services.lambda.runtime.events.models.dynamodb.AttributeValue> entry : streamRecord.getNewImage().entrySet()) {
-			newValues.put(entry.getKey(), entry.getValue().getS());
+			newValues.put(entry.getKey(), entry.getValue().getN());
 		}
 		return newValues;
 	}
