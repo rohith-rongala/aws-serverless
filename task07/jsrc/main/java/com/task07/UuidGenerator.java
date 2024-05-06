@@ -35,7 +35,7 @@ public class UuidGenerator implements RequestHandler<Object, String> {
 
 	public String handleRequest(Object request, Context context) {
 		String bucket = "cmtr-aa756657-uuid-storage-test"; // replace with your bucket name
-		String key = Instant.now().toString() + ".json";
+		String key = Instant.now().toString();
 
 		// Generate 10 UUIDs
 		Map<String, Object> data = new HashMap<>();
