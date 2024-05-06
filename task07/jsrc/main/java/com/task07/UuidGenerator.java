@@ -14,6 +14,7 @@ import com.syndicate.deployment.model.RetentionSetting;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class UuidGenerator implements RequestHandler<Object, String> {
 
 	public String handleRequest(Object request, Context context) {
 		String bucket = "cmtr-aa756657-uuid-storage-test"; // replace with your bucket name
-		String key = LocalDateTime.now().toString() + ".json";
+		String key = Instant.now().toString() + ".json";
 
 		// Generate 10 UUIDs
 		Map<String, Object> data = new HashMap<>();
