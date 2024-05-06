@@ -13,11 +13,16 @@
     "timeout" : 300,
     "subnet_ids" : [ ],
     "security_group_ids" : [ ],
-    "dependencies" : [ ],
-    "event_sources" : [ ],
+    "dependencies" : [ {
+      "resource_name" : "uuid_trigger",
+      "resource_type" : "cloudwatch_rule"
+    } ],
+    "event_sources" : [ {
+      "resource_type" : "cloudwatch_rule_trigger",
+      "target_rule" : "uuid_trigger"
+    } ],
     "env_variables" : { },
-    "publish_version" : true,
-    "alias" : "${lambdas_alias_name}",
+    "publish_version" : false,
     "logs_expiration" : "${logs_expiration}",
     "snap_start" : "None"
   }
