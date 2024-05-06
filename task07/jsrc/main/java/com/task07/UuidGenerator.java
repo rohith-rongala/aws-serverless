@@ -33,7 +33,7 @@ public class UuidGenerator implements RequestHandler<Object, String> {
 	private AmazonS3 s3 = AmazonS3ClientBuilder.standard().build();
 
 	public String handleRequest(Object request, Context context) {
-		String bucket = "uuid-storage"; // replace with your bucket name
+		String bucket = "cmtr-aa756657-uuid-storage-test"; // replace with your bucket name
 		String key = LocalDateTime.now().toString() + ".json";
 
 		// Generate 10 UUIDs
