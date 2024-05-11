@@ -16,7 +16,7 @@
     "dependencies" : [ ],
     "event_sources" : [ ],
     "env_variables" : { },
-    "publish_version" : false,
+    "publish_version" : true,
     "layers" : [ "sdk_layer" ],
     "logs_expiration" : "${logs_expiration}",
     "snap_start" : "None",
