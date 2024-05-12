@@ -35,7 +35,7 @@ public class Processor implements RequestHandler<Object, String> {
 
 	private final AmazonDynamoDB client = AmazonDynamoDBClientBuilder.defaultClient();
 	private final DynamoDB dynamoDB = new DynamoDB(client);
-	private final Table table = dynamoDB.getTable("cmtr-aa756657-Weather");
+	private final Table table = dynamoDB.getTable("cmtr-aa756657-Weather-test");
 	private final Gson gson = new Gson();
 	private final HttpClient httpClient = HttpClient.newHttpClient();
 
