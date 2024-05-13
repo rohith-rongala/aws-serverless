@@ -35,7 +35,7 @@ public class Processor implements RequestHandler<Object, String> {
 
 	private final AmazonDynamoDB client = AmazonDynamoDBClientBuilder.defaultClient();
 	private final DynamoDB dynamoDB = new DynamoDB(client);
-	private final Table table = dynamoDB.getTable("cmtr-aa756657-Weather-test");
+	private final Table table = dynamoDB.getTable("cmtr-aa756657-Weather");
 	private final Gson gson = new Gson();
 	private final HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -44,12 +44,13 @@ public class Processor implements RequestHandler<Object, String> {
 		try {
 			// Step 1: Call the weather API
 			HttpRequest request = HttpRequest.newBuilder()
-					.uri(URI.create("https://api.open-meteo.com/v1/forecast?latitude=50.4375&longitude=30.5&hourly=temperature_2m"))
+					.uri(URI.create("https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m"))
 					.build();
 			String responseBody = httpClient.send(request, HttpResponse.BodyHandlers.ofString()).body();
 
 			// Step 2: Parse the weather API response
 			//WeatherResponse weather = gson.fromJson(responseBody, WeatherResponse.class);
+			HashMap<String,Object> forecast = gson.fromJson(responseBody, HashMap.class);
 
 			// Step 3: Generate a UUID for the 'id' field
 			String id = UUID.randomUUID().toString();
@@ -59,7 +60,7 @@ public class Processor implements RequestHandler<Object, String> {
 
 			Item eventItem = new Item()
 					.withPrimaryKey("id", id)
-					.withString("forecast", responseBody);
+					.with("forecast", forecast);
 
 			// Save event data to DynamoDB
 			table.putItem(eventItem);
@@ -74,7 +75,7 @@ public class Processor implements RequestHandler<Object, String> {
 	}
 }
 
-/*class WeatherResponse {
+class WeatherResponse {
 	double latitude;
 	double longitude;
 	double elevation;
@@ -85,26 +86,6 @@ public class Processor implements RequestHandler<Object, String> {
 	String timezone_abbreviation;
 	double utc_offset_seconds;
 
-	// getters and setters
-	// latitude
-	public double getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
-
-	// longitude
-	public double getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
-
-	// other getters and setters...
 }
 
 class Hourly {
@@ -119,7 +100,7 @@ class HourlyUnits {
 	String time;
 
 	// getters and setters
-}*/
+}
 
 
 
