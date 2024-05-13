@@ -44,7 +44,7 @@ public class Processor implements RequestHandler<Object, String> {
 		try {
 			// Step 1: Call the weather API
 			HttpRequest request = HttpRequest.newBuilder()
-					.uri(URI.create("https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m"))
+					.uri(URI.create("https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m"))
 					.build();
 			String responseBody = httpClient.send(request, HttpResponse.BodyHandlers.ofString()).body();
 
