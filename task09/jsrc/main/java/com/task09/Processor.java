@@ -35,7 +35,7 @@ public class Processor implements RequestHandler<Object, String> {
 
 	private final AmazonDynamoDB client = AmazonDynamoDBClientBuilder.defaultClient();
 	private final DynamoDB dynamoDB = new DynamoDB(client);
-	private final Table table = dynamoDB.getTable("cmtr-aa756657-Weather");
+	private final Table table = dynamoDB.getTable("cmtr-aa756657-Weather-test");
 	private final Gson gson = new Gson();
 	private final HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -44,7 +44,7 @@ public class Processor implements RequestHandler<Object, String> {
 		try {
 			// Step 1: Call the weather API
 			HttpRequest request = HttpRequest.newBuilder()
-					.uri(URI.create("https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m"))
+					.uri(URI.create("https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m"))
 					.build();
 			String responseBody = httpClient.send(request, HttpResponse.BodyHandlers.ofString()).body();
 
