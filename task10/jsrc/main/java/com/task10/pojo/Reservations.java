@@ -5,10 +5,10 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import lombok.Data;
 
 @Data
-@DynamoDBTable(tableName = "cmtr-aa756657-Reservations")
+@DynamoDBTable(tableName = "cmtr-aa756657-Reservations-test")
 public class Reservations {
     @DynamoDBHashKey
-    private String reservationId;
+    private String id;
     private int tableNumber;
     private String clientName;
     private String phoneNumber;
