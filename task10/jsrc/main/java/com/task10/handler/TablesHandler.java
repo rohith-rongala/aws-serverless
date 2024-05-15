@@ -19,7 +19,7 @@ import java.util.Map;
 public class TablesHandler {
     public APIGatewayProxyResponseEvent getAllTables() {
         AmazonDynamoDB ddb = AmazonDynamoDBClientBuilder.defaultClient();
-        String tableName = "cmtr-aa756657-Tables";
+        String tableName = "cmtr-aa756657-Tables-test";
 
         ScanRequest scanRequest = new ScanRequest()
                 .withTableName(tableName);
