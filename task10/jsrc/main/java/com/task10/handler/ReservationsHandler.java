@@ -47,7 +47,7 @@ public class ReservationsHandler {
 
     public APIGatewayProxyResponseEvent getAllReservations() {
         AmazonDynamoDB ddb = AmazonDynamoDBClientBuilder.defaultClient();
-        String tableName = "cmtr-aa756657-Reservations";
+        String tableName = "cmtr-aa756657-Reservations-test";
 
         ScanRequest scanRequest = new ScanRequest()
                 .withTableName(tableName);
@@ -57,7 +57,7 @@ public class ReservationsHandler {
 
         for (Map<String, AttributeValue> item : result.getItems()){
             Reservations reservation = new Reservations(); // assuming you have a POJO class 'Table' with these fields and their setters & getters
-            reservation.setReservationId(item.get("reservationId").getS());
+            reservation.setReservationId(item.get("id").getS());
             reservation.setTableNumber(Integer.parseInt(item.get("tableNumber").getN()));
             reservation.setClientName(item.get("clientName").getS());
             reservation.setPhoneNumber(item.get("phoneNumber").getS());
