@@ -89,25 +89,7 @@
         "ALLOW_REFRESH_TOKEN_AUTH",
         "ALLOW_USER_PASSWORD_AUTH"
       ]
-    },
-    "schema": [{
-      "attribute_data_type": "String",
-      "name": "email",
-      "required": true,
-      "mutable": true
-      },
-      {
-        "attribute_data_type": "String",
-        "name": "firstName",
-        "required": false,
-        "mutable": true
-      },
-      {
-        "attribute_data_type": "String",
-        "name": "lastName",
-        "required": false,
-        "mutable": true
-      }]
+    }
   },
   "task10_api": {
     "resource_type": "api_gateway",
