@@ -77,7 +77,7 @@
     ],
     "sms_configuration": {},
     "username_attributes": [
-      "email"
+      "email","firstName","lastName"
     ],
     "client": {
       "client_name": "client-app",
@@ -89,7 +89,25 @@
         "ALLOW_REFRESH_TOKEN_AUTH",
         "ALLOW_USER_PASSWORD_AUTH"
       ]
-    }
+    },
+    "schema": [{
+      "attribute_data_type": "String",
+      "name": "email",
+      "required": true,
+      "mutable": true
+      },
+      {
+        "attribute_data_type": "String",
+        "name": "firstName",
+        "required": false,
+        "mutable": true
+      },
+      {
+        "attribute_data_type": "String",
+        "name": "lastName",
+        "required": false,
+        "mutable": true
+      }]
   },
   "task10_api": {
     "resource_type": "api_gateway",
@@ -141,7 +159,7 @@
           "default_error_pattern": true
         },
         "POST": {
-          "authorization_type": "NONE",
+          "authorization_type": "task10_api_authorizer",
           "integration_type": "lambda",
           "lambda_name": "api_handler",
           "enable_proxy": true,
@@ -156,7 +174,7 @@
       "/reservations": {
         "enable_cors": false,
         "GET": {
-          "authorization_type": "NONE",
+          "authorization_type": "task10_api_authorizer",
           "integration_type": "lambda",
           "lambda_name": "api_handler",
           "enable_proxy": true,
