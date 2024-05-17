@@ -38,11 +38,11 @@ public class ReservationsHandler {
 
         System.out.println("Returning");
         // Construct response
+        Map<String,String> responseStruct = new HashMap<>();
+        responseStruct.put("reservationId", reservationItem.getId());
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         response.setStatusCode(200);
-        response.setBody("{\"reservationId\": " + reservationItem.getId() + "}");
-
-        return response;
+        response.setBody(new Gson().toJson(responseStruct));
     }
 
 
