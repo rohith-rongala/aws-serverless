@@ -29,7 +29,7 @@ import java.util.Objects;
 )
 public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-	private static final String USER_POOL_NAME = "cmtr-aa756657-simple-booking-userpool";
+	private static final String USER_POOL_NAME = "cmtr-aa756657-simple-booking-userpool-test";
 	private final CognitoIdentityProviderClient cognitoClient;
 	private static final String USER_POOL_ID = getUserPoolId();
 	private static final String APP_CLIENT_ID = getClientId();
