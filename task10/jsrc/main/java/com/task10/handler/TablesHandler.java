@@ -29,7 +29,7 @@ public class TablesHandler {
     // Initialize Gson object
     private static Gson gson = new Gson();
 
-    private final String tableName = "cmtr-aa756657-Tables";
+    private final String tableName = "cmtr-aa756657-Tables-test";
 
     public APIGatewayProxyResponseEvent getAllTables() {
 //        AmazonDynamoDB ddb = AmazonDynamoDBClientBuilder.defaultClient();
