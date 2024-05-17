@@ -16,4 +16,15 @@ public class Tables {
     @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.BOOL)
     private boolean isVip;
     private int minOrder;
+
+    @Override
+    public String toString() {
+        return "Tables{" +
+                "id=" + id +
+                ", number=" + number +
+                ", places=" + places +
+                ", isVip=" + isVip +
+                ", minOrder=" + minOrder +
+                '}';
+    }
 }

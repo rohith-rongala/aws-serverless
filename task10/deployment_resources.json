@@ -51,7 +51,13 @@
     "hash_key_type": "N",
     "read_capacity": 1,
     "write_capacity": 1,
-    "global_indexes": [],
+    "global_indexes": [
+      {
+        "name": "TableIndex",
+        "index_key_name": "number",
+        "index_key_type": "N"
+      }
+    ],
     "autoscaling": []
   },
   "Reservations": {
@@ -90,12 +96,14 @@
         "ALLOW_USER_PASSWORD_AUTH"
       ]
     },
-    "schema": [{
-      "attribute_data_type": "String",
-      "name": "email",
-      "required": true,
-      "mutable": true
-      }]
+    "schema": [
+      {
+        "attribute_data_type": "String",
+        "name": "email",
+        "required": true,
+        "mutable": true
+      }
+    ]
   },
   "task10_api": {
     "resource_type": "api_gateway",
