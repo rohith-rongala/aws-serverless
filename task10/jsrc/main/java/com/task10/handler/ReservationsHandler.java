@@ -43,6 +43,8 @@ public class ReservationsHandler {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         response.setStatusCode(200);
         response.setBody(new Gson().toJson(responseStruct));
+
+        return response;
     }
 
 
