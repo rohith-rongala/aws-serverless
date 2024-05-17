@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class ReservationsHandler {
-    private final String tableName = "cmtr-aa756657-Reservations";
+    private final String tableName = "cmtr-aa756657-Reservations-test";
     public APIGatewayProxyResponseEvent postReservations(APIGatewayProxyRequestEvent request) {
         System.out.println("Post Reservations");
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.defaultClient();
