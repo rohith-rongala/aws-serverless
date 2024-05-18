@@ -692,7 +692,7 @@
         "x-amazon-apigateway-authorizer": {
           "type": "cognito_user_pools",
           "x-syndicate-cognito-userpool-names": [
-            "simple-booking-userpool"
+            "simple-booking-userpool-test"
           ]
         }
       }
