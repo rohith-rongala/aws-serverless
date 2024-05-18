@@ -565,13 +565,13 @@
     },
     "securitySchemes": {
       "task11_api_authorizer": {
-        "type": "apiKey",
+        "type": "http",
         "name": "Authorization",
         "in": "header",
         "x-amazon-apigateway-authtype": "cognito_user_pools",
         "x-amazon-apigateway-authorizer": {
           "type": "cognito_user_pools",
-          "x-syndicate-cognito-userpool-names": ["cognito_userpool_name"]
+          "x-syndicate-cognito-userpool-names": ["simple-booking-userpool"]
         }
       }
     }
