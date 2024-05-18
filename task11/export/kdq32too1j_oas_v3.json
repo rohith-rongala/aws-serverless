@@ -187,23 +187,29 @@
         }
       },
       "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Table"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/TableResponse"
                 }
               }
             }
+          },
+          "400": {
+            "description": "400 response"
           }
         },
         "security": [
@@ -385,7 +391,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/Table"
                 }
               }
             }
@@ -485,7 +491,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/SignUpRequest"
                 }
               }
             }
@@ -561,6 +567,120 @@
       "Empty": {
         "title": "Empty Schema",
         "type": "object"
+      },
+      "SignUpRequest": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "pattern": "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$%^*])[A-Za-z\\d$%^*]{12,}$"
+          }
+        }
+      },
+      "SignInRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "pattern": "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$%^*])[A-Za-z\\d$%^*]{12,}$"
+          }
+        }
+      },
+      "SignInResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          }
+        }
+      },
+      "Table": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "number": {
+            "type": "integer"
+          },
+          "places": {
+            "type": "integer"
+          },
+          "isVip": {
+            "type": "boolean"
+          },
+          "minOrder": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "places",
+          "isVip"
+        ]
+      },
+      "TableResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "ReservationRequest": {
+        "type": "object",
+        "properties": {
+          "tableNumber": {
+            "type": "integer"
+          },
+          "clientName": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "slotTimeStart": {
+            "type": "string"
+          },
+          "slotTimeEnd": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tableNumber",
+          "clientName",
+          "phoneNumber",
+          "date",
+          "slotTimeStart",
+          "slotTimeEnd"
+        ]
+      },
+      "ReservationResponse": {
+        "type": "object",
+        "properties": {
+          "reservationId": {
+            "type": "string"
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -571,7 +691,9 @@
         "x-amazon-apigateway-authtype": "cognito_user_pools",
         "x-amazon-apigateway-authorizer": {
           "type": "cognito_user_pools",
-          "x-syndicate-cognito-userpool-names": ["simple-booking-userpool"]
+          "x-syndicate-cognito-userpool-names": [
+            "simple-booking-userpool"
+          ]
         }
       }
     }
