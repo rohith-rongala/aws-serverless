@@ -17,9 +17,11 @@
   "paths": {
     "/reservations": {
       "get": {
+        "summary": "Fetch all available reservations",
+        "description": "Returns a list of all reservations booked.",
         "responses": {
           "200": {
-            "description": "200 response",
+            "description": "200 Success Response",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -30,7 +32,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/ReservationsDTO"
                 }
               }
             }
@@ -57,9 +59,23 @@
         }
       },
       "post": {
+        "summary": "Book a Reservation",
+        "description": "Checks for Table exists and availability of Reservation slot.",
+        "requestBody": {
+          "description": "Reservations object needed for persisting.",
+          "$ref": "#/components/schemas/ReservationsDTO",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReservationsDTO"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "200 response",
+            "description": "200 Success Response",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -70,7 +86,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/ReservationsDTO"
                 }
               }
             }
@@ -97,6 +113,8 @@
         }
       },
       "options": {
+        "summary": "Handling error",
+        "description": "Error handling on reservations.",
         "responses": {
           "200": {
             "description": "200 response",
@@ -147,9 +165,11 @@
     },
     "/tables": {
       "get": {
+        "summary": "Get all Tables info",
+        "description": "Returns a list of all available Tables.",
         "responses": {
           "200": {
-            "description": "200 response",
+            "description": "200 Success Response",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -160,7 +180,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/TablesDTO"
                 }
               }
             }
@@ -187,29 +207,36 @@
         }
       },
       "post": {
+        "summary": "Saving a Table",
+        "description": "Creating a new Tables record.",
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Table"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TableResponse"
-                }
+                "$ref": "#/components/schemas/TablesDTO"
               }
             }
           },
-          "400": {
-            "description": "400 response"
+          "description": "Tables object needed for persisting.",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "200 Success Response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TablesDTO"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -233,9 +260,11 @@
         }
       },
       "options": {
+        "summary": "Handling Tables Error",
+        "description": "Error handling for Tables API",
         "responses": {
           "200": {
-            "description": "200 response",
+            "description": "200 Success Response",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -283,9 +312,22 @@
     },
     "/signin": {
       "post": {
+        "summary": "User SigIn",
+        "description": "User data for SignIn.",
+        "requestBody": {
+          "description": "SignIn object needed for Authenticating.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignInDTO"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "200 response",
+            "description": "200 Success Response",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -296,7 +338,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/SignInDTO"
                 }
               }
             }
@@ -318,9 +360,11 @@
         }
       },
       "options": {
+        "summary": "Authentication Error",
+        "description": "Error Handling for Authentication.",
         "responses": {
           "200": {
-            "description": "200 response",
+            "description": "200 Success Response",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -368,6 +412,8 @@
     },
     "/tables/{tableId}": {
       "get": {
+        "summary": "Fetch a Table",
+        "description": "Returns a Table of id TableId.",
         "parameters": [
           {
             "name": "tableId",
@@ -380,7 +426,7 @@
         ],
         "responses": {
           "200": {
-            "description": "200 response",
+            "description": "200 Success Response",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -391,7 +437,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Table"
+                  "$ref": "#/components/schemas/Empty"
                 }
               }
             }
@@ -418,6 +464,8 @@
         }
       },
       "options": {
+        "summary": "Fetch a Table",
+        "description": "Returns a Table of TableId.",
         "parameters": [
           {
             "name": "tableId",
@@ -430,7 +478,7 @@
         ],
         "responses": {
           "200": {
-            "description": "200 response",
+            "description": "200 Success Response",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -478,9 +526,22 @@
     },
     "/signup": {
       "post": {
+        "summary": "SignUp a User",
+        "description": "Create a new User",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignUpDTO"
+              }
+            }
+          },
+          "description": "SignUp object needed for persisting.",
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "200 response",
+            "description": "200 Success Response",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -491,7 +552,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SignUpRequest"
+                  "$ref": "#/components/schemas/SignUpDTO"
                 }
               }
             }
@@ -513,9 +574,11 @@
         }
       },
       "options": {
+        "summary": "SignUp Error",
+        "description": "Handling SignUp Error.",
         "responses": {
           "200": {
-            "description": "200 response",
+            "description": "200 Success Response",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -568,7 +631,7 @@
         "title": "Empty Schema",
         "type": "object"
       },
-      "SignUpRequest": {
+      "SignUpDTO": {
         "type": "object",
         "properties": {
           "firstName": {
@@ -582,12 +645,11 @@
             "format": "email"
           },
           "password": {
-            "type": "string",
-            "pattern": "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$%^*])[A-Za-z\\d$%^*]{12,}$"
+            "type": "string"
           }
         }
       },
-      "SignInRequest": {
+      "SignInDTO": {
         "type": "object",
         "properties": {
           "email": {
@@ -595,20 +657,11 @@
             "format": "email"
           },
           "password": {
-            "type": "string",
-            "pattern": "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$%^*])[A-Za-z\\d$%^*]{12,}$"
-          }
-        }
-      },
-      "SignInResponse": {
-        "type": "object",
-        "properties": {
-          "accessToken": {
             "type": "string"
           }
         }
       },
-      "Table": {
+      "TablesDTO": {
         "type": "object",
         "properties": {
           "id": {
@@ -634,17 +687,12 @@
           "isVip"
         ]
       },
-      "TableResponse": {
+      "ReservationsDTO": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer"
-          }
-        }
-      },
-      "ReservationRequest": {
-        "type": "object",
-        "properties": {
+            "type": "string"
+          },
           "tableNumber": {
             "type": "integer"
           },
@@ -659,26 +707,12 @@
             "format": "date"
           },
           "slotTimeStart": {
-            "type": "string"
+            "type": "string",
+            "format": "date-time"
           },
           "slotTimeEnd": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "tableNumber",
-          "clientName",
-          "phoneNumber",
-          "date",
-          "slotTimeStart",
-          "slotTimeEnd"
-        ]
-      },
-      "ReservationResponse": {
-        "type": "object",
-        "properties": {
-          "reservationId": {
-            "type": "string"
+            "type": "string",
+            "format": "date-time"
           }
         }
       }
@@ -692,7 +726,7 @@
         "x-amazon-apigateway-authorizer": {
           "type": "cognito_user_pools",
           "x-syndicate-cognito-userpool-names": [
-            "simple-booking-userpool-test"
+            "simple-booking-userpool"
           ]
         }
       }
