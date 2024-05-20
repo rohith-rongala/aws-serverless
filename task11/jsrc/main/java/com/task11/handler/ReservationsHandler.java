@@ -12,24 +12,39 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import com.task11.pojo.Reservations;
 
+import com.amazonaws.services.dynamodbv2.document.*;
 import com.task11.pojo.Tables;
-import com.task11.util.Constants;
+
 
 import java.util.*;
 
 
 public class ReservationsHandler {
 
-    Map<String, String> headers = new Constants().getHeaders();
-    AmazonDynamoDB client = AmazonDynamoDBClientBuilder.defaultClient();
+    private final String ReservationsTable = "cmtr-aa756657-Reservations-test";
+    private final String TablesTable = "cmtr-aa756657-Tables-test";
 
 
     public APIGatewayProxyResponseEvent postReservations(APIGatewayProxyRequestEvent request) {
+        Map<String,String> headers = new HashMap<>();
+        headers.put("Access-Control-Allow-Headers", "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
+        headers.put("Access-Control-Allow-Origin", "*");
+        headers.put("Access-Control-Allow-Methods", "*");
+        headers.put("Accept-Version", "*");
+        System.out.println("Post Reservations");
+        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.defaultClient();
+        DynamoDB dynamoDB = new DynamoDB(client);
         DynamoDBMapper mapper = new DynamoDBMapper(client);
+
+        System.out.println("Mapper created successfully");
+
         Gson gson = new Gson();
         Reservations reservationItem = gson.fromJson(request.getBody(), Reservations.class);
+        System.out.println("ReservationItem : " + reservationItem);
 
+        System.out.println("Checking Table with " + reservationItem.getTableNumber());
         // Check if table exists
+
         DynamoDBQueryExpression<Tables> queryExpression = new DynamoDBQueryExpression<Tables>()
                 .withIndexName("TableIndex")
                 .withConsistentRead(false)
@@ -38,27 +53,31 @@ public class ReservationsHandler {
                 .withExpressionAttributeValues(Collections.singletonMap(":val", new AttributeValue().withN(String.valueOf(reservationItem.getTableNumber()))));
 
         List<Tables> tableItems = mapper.query(Tables.class, queryExpression);
+        System.out.println("TableItems : " + tableItems.toString());
 
         if (tableItems.isEmpty()) {
-            return new APIGatewayProxyResponseEvent().withStatusCode(400);
+            return new APIGatewayProxyResponseEvent().withStatusCode(400).withHeaders(headers);
         }
 
-        // Check for overlapping reservations
-        ScanResult scanResult = client.scan(new ScanRequest().withTableName(Constants.RESERVATIONS_NAME));
+        System.out.println("Checking Overlapping");
+        ScanResult scanResult = client.scan(new ScanRequest().withTableName(ReservationsTable)); // Replace with the name of your 'Reservations' table
+        System.out.println("Scanned successfully, checking for overlapping");
         for (Map<String, AttributeValue> item : scanResult.getItems()) {
             if (item.get("tableNumber").getN().equals(String.valueOf(reservationItem.getTableNumber())) &&
                     !(item.get("slotTimeEnd").getS().compareTo(reservationItem.getSlotTimeStart()) < 0 ||
                             item.get("slotTimeStart").getS().compareTo(reservationItem.getSlotTimeEnd()) > 0) &&
                     (item.get("date").getS().equals(reservationItem.getDate()))) {
-                return new APIGatewayProxyResponseEvent().withStatusCode(400);
+                return new APIGatewayProxyResponseEvent().withStatusCode(400).withHeaders(headers);
             }
         }
+
 
         String uuid = UUID.randomUUID().toString();
         reservationItem.setId(uuid);
         System.out.println("Saving Reservations");
         mapper.save(reservationItem);
 
+        System.out.println("Returning");
         // Construct response
         Map<String, String> responseStruct = new HashMap<>();
         responseStruct.put("reservationId", reservationItem.getId());
@@ -72,10 +91,17 @@ public class ReservationsHandler {
 
 
     public APIGatewayProxyResponseEvent getAllReservations() {
-        ScanRequest scanRequest = new ScanRequest()
-                .withTableName(Constants.RESERVATIONS_NAME);
+        Map<String,String> headers = new HashMap<>();
+        headers.put("Access-Control-Allow-Headers", "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
+        headers.put("Access-Control-Allow-Origin", "*");
+        headers.put("Access-Control-Allow-Methods", "*");
+        headers.put("Accept-Version", "*");
+        AmazonDynamoDB ddb = AmazonDynamoDBClientBuilder.defaultClient();
 
-        ScanResult result = client.scan(scanRequest);
+        ScanRequest scanRequest = new ScanRequest()
+                .withTableName(ReservationsTable);
+
+        ScanResult result = ddb.scan(scanRequest);
         List<Reservations> reservations = new ArrayList<>();
 
         for (Map<String, AttributeValue> item : result.getItems()) {

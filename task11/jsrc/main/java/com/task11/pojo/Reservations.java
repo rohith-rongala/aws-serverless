@@ -2,11 +2,10 @@ package com.task11.pojo;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.task11.util.Constants;
 import lombok.Data;
 
 @Data
-@DynamoDBTable(tableName = Constants.RESERVATIONS_NAME)
+@DynamoDBTable(tableName = "cmtr-aa756657-Reservations-test")
 public class Reservations {
     @DynamoDBHashKey
     private String id;

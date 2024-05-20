@@ -4,11 +4,10 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperFieldModel;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTyped;
-import com.task11.util.Constants;
 import lombok.Data;
 
 @Data
-@DynamoDBTable(tableName = Constants.TABLES_NAME)
+@DynamoDBTable(tableName = "cmtr-aa756657-Tables-test")
 public class Tables {
     @DynamoDBHashKey
     private int id;

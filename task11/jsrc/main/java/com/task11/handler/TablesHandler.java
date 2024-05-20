@@ -19,21 +19,28 @@ import java.util.Map;
 
 
 import com.amazonaws.services.dynamodbv2.document.*;
-import com.task11.util.Constants;
 
 
 public class TablesHandler {
 
-    private static AmazonDynamoDB client = AmazonDynamoDBClientBuilder.defaultClient();
-    private static DynamoDB dynamoDB = new DynamoDB(client);
+    private static AmazonDynamoDB ddbClient = AmazonDynamoDBClientBuilder.defaultClient();
+    private static DynamoDB dynamoDB = new DynamoDB(ddbClient);
+
+    // Initialize Gson object
     private static Gson gson = new Gson();
-    Map<String, String> headers = new Constants().getHeaders();
+
+    private final String tableName = "cmtr-aa756657-Tables-test";
 
     public APIGatewayProxyResponseEvent getAllTables() {
+        Map<String,String> headers = new HashMap<>();
+        headers.put("Access-Control-Allow-Headers", "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
+        headers.put("Access-Control-Allow-Origin", "*");
+        headers.put("Access-Control-Allow-Methods", "*");
+        headers.put("Accept-Version", "*");
         ScanRequest scanRequest = new ScanRequest()
-                .withTableName(Constants.TABLES_NAME);
+                .withTableName(tableName);
 
-        ScanResult result = client.scan(scanRequest);
+        ScanResult result = ddbClient.scan(scanRequest);
         List<Tables> tables = new ArrayList<>();
 
         for (Map<String, AttributeValue> item : result.getItems()) {
@@ -61,29 +68,50 @@ public class TablesHandler {
     }
 
     public APIGatewayProxyResponseEvent postTables(APIGatewayProxyRequestEvent request) {
-        DynamoDBMapper mapper = new DynamoDBMapper(client);
+        Map<String,String> headers = new HashMap<>();
+        headers.put("Access-Control-Allow-Headers", "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
+        headers.put("Access-Control-Allow-Origin", "*");
+        headers.put("Access-Control-Allow-Methods", "*");
+        headers.put("Accept-Version", "*");
+        System.out.println("Post Tables");
+
+        DynamoDBMapper mapper = new DynamoDBMapper(ddbClient);
+
+        System.out.println("Mapper created successfully");
 
         Tables tableItem = gson.fromJson(request.getBody(), Tables.class);
+        System.out.println(tableItem.toString());
         System.out.println("Saving Tables");
         mapper.save(tableItem);
 
+        System.out.println("Returning");
         // Construct response
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         response.setStatusCode(200);
         response.setBody("{\"id\": " + tableItem.getId() + "}");
         response.setHeaders(headers);
+
         return response;
     }
 
     public APIGatewayProxyResponseEvent getTables(APIGatewayProxyRequestEvent event) {
+        Map<String,String> headers = new HashMap<>();
+        headers.put("Access-Control-Allow-Headers", "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
+        headers.put("Access-Control-Allow-Origin", "*");
+        headers.put("Access-Control-Allow-Methods", "*");
+        headers.put("Accept-Version", "*");
         int tableId = Integer.parseInt(event.getPathParameters().get("tableId"));
+        System.out.println(tableId);
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         try {
             // Fetch table item from DynamoDB
-            Table table = dynamoDB.getTable(Constants.TABLES_NAME);
-            Item item = table.getItem("id", tableId);
+            Table table = dynamoDB.getTable(tableName); // replace with name of your DynamoDB table
+            Item item = table.getItem("id", tableId); // Presuming primary key attribute name 'Id' in table
 
+            System.out.println(item);
+            // If table item with given ID does not exist, return 400
             if (item == null) {
+                System.out.println("Item null");
                 response.setStatusCode(400);
                 return response;
             }
@@ -96,17 +124,20 @@ public class TablesHandler {
             if (item.isPresent("minOrder"))
                 tables.setMinOrder(Integer.parseInt(item.getString("minOrder")));
 
+
+            System.out.println("All set Response");
             response.setStatusCode(200);
             response.setBody(gson.toJson(tables));
 
         } catch (Exception e) {
-            System.out.println(e);
             response.setStatusCode(400);
-            response.setBody("Table with id " + tableId + " not found");
+            System.out.println(e);
         }
+
         response.setHeaders(headers);
         return response;
     }
+
 
 }
 
